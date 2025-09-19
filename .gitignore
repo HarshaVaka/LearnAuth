@@ -65,7 +65,6 @@ packages/
 
 # ASP.NET Core runtime
 wwwroot/
-appsettings*.json
 # Optional: Ignore secrets file if using dotnet user-secrets
 secrets.json
 
