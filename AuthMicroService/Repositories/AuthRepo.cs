@@ -16,12 +16,12 @@ namespace AuthMicroService.Repositories
             return user;
         }
 
-        public async Task<User?> GetUserByUserNameAsync(string userName)
+        public async Task<User?> GetUserByUserIdAsync(Guid userId)
         {
             return await _dbContext.Users
                   .Include(u => u.UserRoles)
                   .ThenInclude(ur => ur.Role)
-                  .FirstOrDefaultAsync(u => u.UserName == userName);
+                  .FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
         public async Task<User?> GetUserByEmailAsync(string mail)

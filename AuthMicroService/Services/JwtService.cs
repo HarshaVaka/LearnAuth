@@ -1,4 +1,5 @@
 ﻿using AuthMicroService.DTOs;
+using AuthMicroService.Entities;
 using AuthMicroService.Services.IServices;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,11 +8,11 @@ using System.Text;
 
 namespace AuthMicroService.Services
 {
-    public class JwtService(IConfiguration configuration):IJwtService
+    public class JwtService(IConfiguration configuration) : IJwtService
     {
-        private readonly IConfiguration _configuration=configuration;
+        private readonly IConfiguration _configuration = configuration;
 
-        public AuthResponseDto GenerateAccessToken(GenerateAccessTokenDto? generateTokenDto)
+        public string GenerateAccessToken(GenerateAccessTokenDto? generateTokenDto)
         {
             var authClaims = new List<Claim>
             {
@@ -21,13 +22,13 @@ namespace AuthMicroService.Services
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            foreach(var role in generateTokenDto?.Roles ?? []) 
+            foreach (var role in generateTokenDto?.Roles ?? [])
             {
-                authClaims.Add(new Claim(ClaimTypes.Role,role));
+                authClaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             var authSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]??"")
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? "")
                );
 
             var token = new JwtSecurityToken(
@@ -40,11 +41,21 @@ namespace AuthMicroService.Services
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
 
-            var authResponse = new AuthResponseDto
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        
+        public RefreshToken GenerateRefreshToken(string ipAddress)
+        {
+            var randomNumber = new byte[32];
+            using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return new RefreshToken
             {
-                AccessToken = new JwtSecurityTokenHandler().WriteToken(token)
+                Token = Convert.ToBase64String(randomNumber),
+                ExpiresAt = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["Jwt:RefreshTokenDays"] ?? "7")),
+                CreatedAt = DateTime.UtcNow,
+                CreatedByIp = ipAddress
             };
-            return authResponse;
         }
     }
 }

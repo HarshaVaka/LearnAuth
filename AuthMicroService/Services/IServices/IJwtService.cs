@@ -1,9 +1,13 @@
-﻿using AuthMicroService.DTOs;
+﻿using System.Security.Claims;
+using AuthMicroService.DTOs;
+using AuthMicroService.Entities;
 
 namespace AuthMicroService.Services.IServices
 {
     public interface IJwtService
     {
-        AuthResponseDto GenerateAccessToken(GenerateAccessTokenDto? generateAccessTokenDto);
+        string GenerateAccessToken(GenerateAccessTokenDto? generateAccessTokenDto);
+        RefreshToken GenerateRefreshToken(string ipAddress);
+        //ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token);
     }
 }

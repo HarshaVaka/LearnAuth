@@ -9,6 +9,8 @@ namespace AuthMicroService.Infrastructure
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRoleMapping> UserRoles { get; set; }
 
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +38,15 @@ namespace AuthMicroService.Infrastructure
                 entity.HasOne(r => r.Role)
                 .WithMany(urm => urm.UserRoles)
                 .HasForeignKey(r => r.RoleId);
+            });
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasOne(rt => rt.User)
+                    .WithMany(u => u.RefreshTokens)
+                    .HasForeignKey(rt => rt.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(rt => rt.UserId); // Index on UserId
             });
         }
     }

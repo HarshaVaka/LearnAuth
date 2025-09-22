@@ -18,5 +18,6 @@ namespace AuthMicroService.Entities
 
         //Navigation
         public ICollection<UserRoleMapping> UserRoles { get; set; } = [];
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
     }
 }

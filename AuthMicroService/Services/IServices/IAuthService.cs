@@ -5,10 +5,12 @@ namespace AuthMicroService.Services.IServices
 {
     public interface IAuthService
     {
-        Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto);
+        Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto, string ipAddress);
 
-        Task LoginAsync(HttpContext httpContext,LoginDto loginDto);
+        Task<AuthResponseDto> LoginAsync(HttpContext httpContext, LoginDto loginDto, string ipAddress);
 
         Task SignOutAsync(HttpContext httpContext); 
+        
+        Task<AuthResponseDto> RefreshTokenAsync(HttpContext httpContext, string ipAddress);
     }
 }
