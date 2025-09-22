@@ -4,14 +4,20 @@ import { setAccessToken } from "../store/tokenStore";
 
 export class AuthService {
   static registerUser = async (payload: RegisterPayload) => {
-    const response = await API.post<Response>("/auth/register", payload);
-    return response.data;
+    const response = await API.post("/auth/register", payload);
+     const { accessToken, accessTokenExpiresAt } = response.data;
+
+    setAccessToken(accessToken, accessTokenExpiresAt);
+    return accessToken;
   };
   static loginUser = async (payload: LoginPayload) => {
-    const response = await API.post<Response>("/auth/login", payload, {
+    const response = await API.post("/auth/login", payload, {
       withCredentials: true,
     });
-    return response.data;
+    const { accessToken, accessTokenExpiresAt } = response.data;
+
+    setAccessToken(accessToken, accessTokenExpiresAt);
+    return accessToken;
   };
   static logoutUser = async (): Promise<void> => {
     await API.post("/auth/logout");
@@ -24,9 +30,9 @@ export class AuthService {
     const response = await API.get("/auth/refresh-token", {
       withCredentials: true,
     });
-    const { accessToken, expiresAt } = response.data;
+    const { accessToken, accessTokenExpiresAt } = response.data;
 
-    setAccessToken(accessToken, expiresAt);
+    setAccessToken(accessToken, accessTokenExpiresAt);
     return accessToken;
   };
 }

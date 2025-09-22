@@ -1,6 +1,7 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AuthService } from "../services/AuthService";
 import { LoginPayload, RegisterPayload } from "../types/Auth.types";
+import { useNavigate } from "react-router-dom";
 
 export const useUser = () => {
     return useQuery({
@@ -12,10 +13,12 @@ export const useUser = () => {
 
 export const useLogin = () => {
     const queryClient = new QueryClient();
+     const navigate = useNavigate(); 
     return useMutation({
         mutationFn: (payload: LoginPayload) => AuthService.loginUser(payload),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["user"] });
+            navigate("/");
         },
     })
 }

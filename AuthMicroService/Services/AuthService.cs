@@ -39,8 +39,8 @@ namespace AuthMicroService.Services
             response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false,
-                SameSite = SameSiteMode.Lax,
+                Secure = true,
+                SameSite = SameSiteMode.None,
                 Expires = refreshToken.ExpiresAt
             });
             return new AuthResponseDto
@@ -71,8 +71,8 @@ namespace AuthMicroService.Services
                     response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
                     {
                         HttpOnly = true,
-                        Secure = false,
-                        SameSite = SameSiteMode.Lax,
+                        Secure = true,
+                        SameSite = SameSiteMode.None,
                         Expires = refreshToken.ExpiresAt
                     });
 
@@ -161,8 +161,8 @@ namespace AuthMicroService.Services
             response.Cookies.Append("refreshToken", newRefreshToken.Token, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false,
-                SameSite = SameSiteMode.Lax,
+                Secure = true,
+                SameSite = SameSiteMode.None,
                 Expires = newRefreshToken.ExpiresAt
             });
 

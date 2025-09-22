@@ -3,15 +3,15 @@ import { HomeService } from "../services/HomeService";
 import { useEffect } from "react";
 
 export default function Home(){
-    const {data, isFetching, isError,isSuccess} = useQuery({
+    const {data, isFetching, isError,error,isSuccess} = useQuery({
         queryKey: ["checkAuth"],
         queryFn: () => HomeService.checkAuth(),
         staleTime: Infinity,
     });
 
     useEffect(() => {
-        console.log({data, isFetching, isError,isSuccess});
-    }, [data, isFetching, isError,isSuccess]);
+        console.log({data, isFetching, isError,isSuccess,error});
+    }, [data, isFetching, isError,isSuccess,error]);
 
 
     if(isError) return <div>Error occurred. Please try again.</div>

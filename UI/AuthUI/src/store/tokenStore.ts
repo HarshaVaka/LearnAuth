@@ -1,17 +1,18 @@
-let accessToken:string|null = null;
-let expiresAt:Date|null = null;
-let refreshPromise:Promise<string> |null = null;
+let accessToken: string | null = null;
+let expiresAt: Date | null = null;
+let refreshPromise: Promise<{token: string, accessTokenExpiresAt: Date}> | null = null;
 
 export const getAccessToken = () => accessToken;
 
-export const setAccessToken = (token:string, expiresAt:Date) => {
+export const setAccessToken = (token: string, expires: Date) => {
   accessToken = token;
-  expiresAt = expiresAt;
+  expiresAt = expires;
 };
 
 export const isTokenExpired = () => {
   if (!accessToken || !expiresAt) return true;
-  return Date.now() >= expiresAt.getTime();
+  console.log(new Date(), new Date(expiresAt))
+  return Date.now() >= new Date(expiresAt).getTime();
 };
 
 export const clearToken = () => {
@@ -20,7 +21,7 @@ export const clearToken = () => {
   refreshPromise = null;
 };
 
-export const setRefreshPromise = (promise:Promise<string>|null) => {
+export const setRefreshPromise = (promise: Promise<{token: string, accessTokenExpiresAt: Date}> | null) => {
   refreshPromise = promise;
 };
 
