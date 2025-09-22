@@ -30,7 +30,3 @@ export class AuthService {
     return accessToken;
   };
 }
-
-
-git config --global user.name "Vaka Harsha Vardhan Reddy"
-git config --global user.email "harshavaka44@gmail.com"
